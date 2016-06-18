@@ -49,13 +49,13 @@ func Reopen(args string) {
 		return
 	}
 	Log.Notice("Reopening log file per IPC request...")
-	logRedirectStdOutToFile(logFile)
+	LogRedirectStdOutToFile(logFile)
 	Log.Notice("Reopened log file per IPC request")
 }
 
 // If there are any existing fd's (e.g. we're reopening logs), we rely
 // on garbage collection to clean them up for us.
-func logRedirectStdOutToFile(logPath string) {
+func LogRedirectStdOutToFile(logPath string) {
 	if logPath == "" {
 		Log.Fatal("Log Path not set")
 	}

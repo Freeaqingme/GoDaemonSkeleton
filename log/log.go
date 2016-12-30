@@ -14,7 +14,7 @@ type Logger struct {
 
 var (
 	Log *Logger
-	logFile string
+	path string
 )
 
 func Open(name, logLevelStr string) *Logger {
@@ -42,20 +42,20 @@ func Open(name, logLevelStr string) *Logger {
 	return Log
 }
 
-
-func Reopen(args string) {
-	if logFile == "" {
+func Reopen() {
+	if path == "" {
 		Log.Notice("Asked to reopen logs but running in foreground. Ignoring.")
 		return
 	}
 	Log.Notice("Reopening log file per IPC request...")
-	LogRedirectStdOutToFile(logFile)
+	LogRedirectStdOutToFile(path)
 	Log.Notice("Reopened log file per IPC request")
 }
 
 // If there are any existing fd's (e.g. we're reopening logs), we rely
 // on garbage collection to clean them up for us.
 func LogRedirectStdOutToFile(logPath string) {
+	path = logPath
 	if logPath == "" {
 		Log.Fatal("Log Path not set")
 	}

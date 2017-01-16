@@ -17,7 +17,7 @@ var (
 	path string
 )
 
-func Open(name, logLevelStr string) *Logger {
+func Open(name, logLevelStr string, prio syslog.Priority) *Logger {
 	logLevel, err := logging.LogLevel(logLevelStr)
 	if err != nil {
 		log.Fatal("Invalid log level specified")
@@ -32,7 +32,7 @@ func Open(name, logLevelStr string) *Logger {
 	formatter := logging.NewBackendFormatter(stdout, formatStdout)
 	stdoutLeveled := logging.AddModuleLevel(formatter)
 	stdoutLeveled.SetLevel(logLevel, "")
-	syslogBackend, err := logging.NewSyslogBackendPriority("cluegetter", syslog.LOG_MAIL)
+	syslogBackend, err := logging.NewSyslogBackendPriority(name, prio)
 	if err != nil {
 		Log.Fatal(err)
 	}

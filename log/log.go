@@ -5,7 +5,6 @@ import (
 	"log"
 	"log/syslog"
 	"os"
-	"syscall"
 )
 
 type Logger struct {
@@ -13,7 +12,7 @@ type Logger struct {
 }
 
 var (
-	Log *Logger
+	Log  *Logger
 	path string
 )
 
@@ -23,7 +22,7 @@ func Open(name, logLevelStr string, prio syslog.Priority) *Logger {
 		log.Fatal("Invalid log level specified")
 	}
 
-	Log = &Logger { logging.MustGetLogger(name) }
+	Log = &Logger{logging.MustGetLogger(name)}
 
 	var formatStdout = logging.MustStringFormatter(
 		"%{color}%{time:2006-01-02T15:04:05.000} %{shortfunc} ▶ %{level:.4s} %{color:reset} %{message}",
@@ -64,6 +63,6 @@ func LogRedirectStdOutToFile(logPath string) {
 	if err != nil {
 		Log.Fatal(err)
 	}
-	syscall.Dup2(int(logFile.Fd()), 1)
-	syscall.Dup2(int(logFile.Fd()), 2)
+
+	stdFdToLogFile(int(logFile.Fd()))
 }
